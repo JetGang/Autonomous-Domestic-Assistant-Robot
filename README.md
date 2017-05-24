@@ -1,6 +1,8 @@
 # Autonomous Domestic Assistant Robot 
 This is a domestic mobile robotic system combined with a manipulator, object recognition and  SLAM technique with mobile devices to assist human in an indoor environment based on multi ROS packages and OpenCV.
+
 This project utilizes the ROS gmapping and amcl package for mapping and navigation, ROS openni_launch package for object recognition and obtaining position information and ROS web_video_server package for sending image frame to ios devices through mjpg-streamer.
+
 It also includes a class `Classifier` which is the `cascade_classification` trained from OpenCV C++ Cascade Classifier Training.
 The whole recognition, picking and placing process show in following video:
 https://youtu.be/sLj5nEyMdNI 
