@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>Pods-Fixcamera.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-FixcameraTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-FixcameraUITests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SocketRocket.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>08EA77251192BF8F22D6ECFED399661B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>285132B93303D053ACB9D2D556C708CC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3EEDDA84CCAF59728ECB89180B280240</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D46CFFBF6916183C3983A028F7B24477</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

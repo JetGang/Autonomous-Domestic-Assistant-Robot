@@ -1,0 +1,236 @@
+#include <ros/ros.h>
+#include <cv_bridge/cv_bridge.h>
+#include "geometry_msgs/Point.h"
+#include "std_msgs/Float64.h"
+#include "std_msgs/Int64.h"
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <math.h>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
+#define PI 3.14159265
+#define l1 115
+#define l2 140 //real distance
+#define l3 18
+
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+
+int begin_signal=0;
+
+class Navigation
+{
+  ros::NodeHandle nh_;
+  ros::Subscriber navigation_signal_begin;
+  ros::Publisher navigation_signal_end;
+  ros::Publisher pickup_prepare;
+  ros::Publisher camera_signal_end;
+  ros::Publisher place_signal;
+  ros::Publisher close_kinect;
+  
+public:
+  Navigation()
+  {
+    // Subscrive to input video feed and publish output video feed
+    navigation_signal_begin = nh_.subscribe("navigation_signal_begin", 1, &Navigation::navigationBegin, this);
+    //extra_sub_ = nh_.subscribe("extra", 1, &ImageConverter::extradistanceCb, this);
+    //signal_sub_ = nh_.subscribe("pickup_end/command", 1, &ImageConverter::signalCb, this);
+    navigation_signal_end = nh_.advertise<std_msgs::Int64>("navigation_signal_end",1);
+    camera_signal_end = nh_.advertise<std_msgs::Int64>("camera_signal_end",1);
+    pickup_prepare = nh_.advertise<std_msgs::Int64>("up_signal",1);
+    close_kinect = nh_.advertise<std_msgs::Int64>("close_distance_move",1);
+
+  }
+
+//  void signalCb(std_msgs::Float64 msg_signal)
+//  {
+//	end_signal=msg_signal.data;
+//  }
+//  void extradistanceCb(std_msgs::Float64 msg_extra)
+//  {
+//	extra=msg_extra.data;
+//	ROS_INFO("extra: %f", extra);
+//  }
+
+  void navigationBegin(std_msgs::Int64 msg)
+  {
+	std_msgs::Int64 end;
+	std_msgs::Int64 pickup;
+	std_msgs::Int64 close_distance_move;
+	begin_signal=msg.data;
+        ROS_INFO("begin_signal: %d", begin_signal);
+	if(begin_signal>0)
+	{
+
+	ros::Rate loopRate(15);
+	//tell the action client that we want to spin a thread by default
+  	MoveBaseClient ac("move_base", true);
+
+  	//wait for the action server to come up
+  	while(!ac.waitForServer(ros::Duration(5.0))){
+    	  ROS_INFO("Waiting for the move_base action server to come up");
+  	  }
+
+  	move_base_msgs::MoveBaseGoal goal;
+
+  	//we'll send a goal to the robot to move 1 meter forward
+  	goal.target_pose.header.frame_id = "map";
+  	goal.target_pose.header.stamp = ros::Time::now();
+	
+	if(begin_signal==1)
+	{
+
+  	goal.target_pose.pose.position.x = 5.35;//3.611;//5.288;
+  	goal.target_pose.pose.position.y = -1.086;//-10.14;//-9.873;
+  	goal.target_pose.pose.position.z = 0.0;
+  	goal.target_pose.pose.orientation.x = 0.0;
+  	goal.target_pose.pose.orientation.y = 0.0;
+  	goal.target_pose.pose.orientation.z = -0.07;//-0.069;//0.816;
+  	goal.target_pose.pose.orientation.w = 0.998;//0.998;//0.578;
+        }
+	else if(begin_signal==2)
+	{
+
+  	goal.target_pose.pose.position.x = -6.672;//lab-22,5.700;//5.35;//3.611;//5.288;
+  	goal.target_pose.pose.position.y = -9.768;//-8.874;//-1.086;//-10.14;//-9.873;
+  	goal.target_pose.pose.position.z = 0.0;
+  	goal.target_pose.pose.orientation.x = 0.0;
+  	goal.target_pose.pose.orientation.y = 0.0;
+  	goal.target_pose.pose.orientation.z = 0.995;//-0.638;//-0.07;//-0.069;//0.816;
+  	goal.target_pose.pose.orientation.w = -0.103;//0.770;//0.998;//0.998;//0.578;
+        }
+	else if(begin_signal==3)
+	{
+
+  	goal.target_pose.pose.position.x = 6.536;//3.611;//5.288;
+  	goal.target_pose.pose.position.y = -2.858;//-10.14;//-9.873;
+  	goal.target_pose.pose.position.z = 0.0;
+  	goal.target_pose.pose.orientation.x = 0.0;
+  	goal.target_pose.pose.orientation.y = 0.0;
+  	goal.target_pose.pose.orientation.z = -0.036;//-0.069;//0.816;
+  	goal.target_pose.pose.orientation.w = 0.999;//0.998;//0.578;
+        }
+	else if(begin_signal==4)
+	{
+
+  	goal.target_pose.pose.position.x = 3.496;//5.35;//3.611;//5.288;
+  	goal.target_pose.pose.position.y = 1.030;//-1.086;//-10.14;//-9.873;
+  	goal.target_pose.pose.position.z = 0.0;
+  	goal.target_pose.pose.orientation.x = 0.0;
+  	goal.target_pose.pose.orientation.y = 0.0;
+  	goal.target_pose.pose.orientation.z = 0.040;//-0.07;//-0.069;//0.816;
+  	goal.target_pose.pose.orientation.w = 0.992;//0.998;//0.998;//0.578;
+        }
+	else if(begin_signal==5)
+	{
+
+  	goal.target_pose.pose.position.x = 3.626;//5.35;//3.611;//5.288;
+  	goal.target_pose.pose.position.y = 0.174;//-1.086;//-10.14;//-9.873;
+  	goal.target_pose.pose.position.z = 0.0;
+  	goal.target_pose.pose.orientation.x = 0.0;
+  	goal.target_pose.pose.orientation.y = 0.0;
+  	goal.target_pose.pose.orientation.z = -0.047;//-0.07;//-0.069;//0.816;
+  	goal.target_pose.pose.orientation.w = 0.999;//0.998;//0.998;//0.578;
+        }
+	else
+	{
+
+  	goal.target_pose.pose.position.x = 0.004;//3.611;//5.288;
+  	goal.target_pose.pose.position.y = 0.002;//-10.14;//-9.873;
+  	goal.target_pose.pose.position.z = 0.0;
+  	goal.target_pose.pose.orientation.x = 0.0;
+  	goal.target_pose.pose.orientation.y = 0.0;
+  	goal.target_pose.pose.orientation.z = -0.003;//-0.069;//0.816;
+  	goal.target_pose.pose.orientation.w = 1;//0.998;//0.578;
+        }
+
+
+  	ROS_INFO("Sending goal");
+  	ac.sendGoal(goal);
+
+  	ac.waitForResult();
+
+  	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+	{
+	   
+	   //ROS_INFO("Start_distance_move");
+	   //system("rosrun kinect distance_move");
+
+    	   ROS_INFO("Hooray, the base moved 1 meter forward");
+	   
+	   int close_time=0;
+	   close_distance_move.data=0;
+
+	   while(ros::ok())
+	   {
+	     close_kinect.publish(close_distance_move);
+	     close_time++;
+	     loopRate.sleep();
+	     if(close_time>3)
+	       break;
+	    }
+	   int empty_time=0;
+
+	   while(ros::ok())
+	   {
+	     empty_time++;
+	     loopRate.sleep();
+	     if(empty_time>50)
+	       break;
+	    }
+
+	   end.data=1;
+	   pickup.data=1;
+
+	   int time_0=0;
+
+	   while(ros::ok())
+	   {
+	     time_0++;
+	     pickup_prepare.publish(pickup);
+	     loopRate.sleep();
+	     if(time_0>1)
+	       break;
+	    }
+	   
+	   int time=0;
+
+	   while(ros::ok())
+	   {
+	     navigation_signal_end.publish(end);
+	     camera_signal_end.publish(end);
+	     time++;
+	     loopRate.sleep();
+	     if(time>3)
+	       break;
+	    }
+	}
+ 	else
+	{
+    	   ROS_INFO("The base failed to move forward 1 meter for some reason");	
+           int time=0;
+
+	   while(ros::ok())
+	   {
+	     navigation_signal_end.publish(end);
+	     time++;
+	     loopRate.sleep();
+	     if(time>3)
+	       break;
+	    }	
+	}
+	begin_signal=0;
+
+	}
+  }
+  
+};
+
+int main(int argc, char* argv[])
+{
+  ros::init(argc, argv, "navigation_goals");
+
+  Navigation ic;
+  ros::spin();
+  return 0;
+}
+

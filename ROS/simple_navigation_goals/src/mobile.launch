@@ -1,0 +1,5 @@
+<launch>
+  <node name="simple_navigation_goals" pkg="simple_navigation_goals" type="simple_navigation_goals" />
+  <node name="goals" pkg="simple_navigation_goals" type="goals" />
+
+</launch>

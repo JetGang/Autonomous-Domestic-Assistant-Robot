@@ -1,0 +1,3 @@
+<launch>
+  <node name="distance_move" pkg="kinect" type="distance_move" />
+</launch>
